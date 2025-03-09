@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>רשימת נעדרים - מערכת טכנולוגית AI</title>
+    <style>
+        /* CSS Variables for Consistent Colors */
+        :root {
+            --primary-color: #1a2f69; /* Dark blue from your navigation */
+            --secondary-color: #4358a2; /* Lighter blue */
+            --accent-color: #e8eaf6; /* Very light blue */
+            --text-color: #333;
+            --background-color: #f5f5f5;
+            --card-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            --border-radius: 8px;
+        }
+
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 2rem;
+            border-radius: var(--border-radius);
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* Search and Filter Section */
+        .search-section {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+        }
+
+        .search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .search-form input,
+        .search-form select {
+            flex: 1;
+            min-width: 200px;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+
+        .search-form button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            flex: 0 0 auto;
+        }
+
+        .search-form button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Missing Persons Grid */
+        .missing-persons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .person-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+
+        .person-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .person-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-bottom: 3px solid var(--primary-color);
+        }
+
+        .person-details {
+            padding: 1.5rem;
+        }
+
+        .person-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .person-info {
+            margin-bottom: 0.3rem;
+            display: flex;
+        }
+
+        .info-label {
+            font-weight: bold;
+            min-width: 90px;
+        }
+
+        .info-value {
+            flex: 1;
+        }
+
+        .more-details-btn {
+            display: block;
+            width: 100%;
+            background-color: var(--secondary-color);
+            color: white;
+            text-align: center;
+            padding: 0.8rem;
+            border: none;
+            margin-top: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .more-details-btn:hover {
+            background-color: var(--primary-color);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--card-shadow);
+        }
+
+        .empty-state h3 {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .empty-state p {
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        .add-missing-btn {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .add-missing-btn:hover {
+            background-color: var(--secondary-color);
+        }
+
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            gap: 0.5rem;
+        }
+
+        .pagination-btn {
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .pagination-btn.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .pagination-btn:hover:not(.active) {
+            background-color: var(--accent-color);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-color);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 3rem;
+        }
+
+        .footer-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            margin-top: 1rem;
+        }
+
+        .footer-links li {
+            margin: 0 1rem;
+        }
+
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: opacity 0.3s;
+        }
+
+        .footer-links a:hover {
+            opacity: 1;
+        }
+
+        /* Loading Indicator */
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--accent-color);
+            border-radius: 50%;
+            border-top-color: var(--primary-color);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .person-card {
+                max-width: 100%;
+            }
+
+            .search-form {
+                flex-direction: column;
+            }
+
+            .search-form input,
+            .search-form select,
+            .search-form button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Page Header -->
+        <header class="page-header">
+            <h1>רשימת נעדרים</h1>
+            <p>כאן ניתן לראות את כל הנעדרים שדווחו במערכת. אנא חפשו וסייעו באיתורם.</p>
+        </header>
+
+        <!-- Search and Filter Section -->
+        <section class="search-section">
+            <form class="search-form" id="searchForm">
+                <input type="text" placeholder="חיפוש לפי שם" id="nameSearch">
+                <select id="areaFilter">
+                    <option value="">כל האזורים</option>
+                    <option value="north">צפון</option>
+                    <option value="center">מרכז</option>
+                    <option value="south">דרום</option>
+                    <option value="jerusalem">ירושלים</option>
+                </select>
+                <select id="ageFilter">
+                    <option value="">גיל</option>
+                    <option value="child">ילדים (0-18)</option>
+                    <option value="young">צעירים (19-30)</option>
+                    <option value="adult">מבוגרים (31-60)</option>
+                    <option value="elderly">קשישים (61+)</option>
+                </select>
+                <button type="submit">חיפוש</button>
+            </form>
+        </section>
+
+        <!-- Missing Persons Grid -->
+        <div id="missingPersonsContainer">
+            <!-- Loading indicator shown initially -->
+            <div class="loading" id="loadingIndicator">
+                <div class="loading-spinner"></div>
+                <p>טוען רשימת נעדרים...</p>
+            </div>
+            
+            <!-- Empty state shown when no missing persons are found -->
+            <div class="empty-state" id="emptyState" style="display: none;">
+                <h3>לא נמצאו נעדרים במערכת</h3>
+                <p>נראה שעדיין אין נעדרים שדווחו במערכת. ברגע שיתווספו נעדרים, הם יופיעו כאן.</p>
+            </div>
+            
+            <!-- Grid for missing persons cards, populated by JavaScript -->
+            <section class="missing-persons-grid" id="missingPersonsGrid" style="display: none;">
+                <!-- Persons cards will be dynamically inserted here -->
+            </section>
+        </div>
+
+        <!-- Pagination -->
+        <div class="pagination" id="pagination" style="display: none;">
+            <!-- Pagination will be dynamically inserted here -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-content">
+            <p>היימנוט</p>
+            <p>© 2025 כל הזכויות שמורות</p>
+        </div>
+    </footer>
+
+    <!-- Template for person card -->
+    <template id="personCardTemplate">
+        <article class="person-card">
+            <img class="person-image" src="" alt="">
+            <div class="person-details">
+                <h3 class="person-name"></h3>
+                <div class="person-info">
+                    <span class="info-label">גיל:</span>
+                    <span class="info-value age"></span>
+                </div>
+                <div class="person-info">
+                    <span class="info-label">אזור:</span>
+                    <span class="info-value area"></span>
+                </div>
+                <div class="person-info">
+                    <span class="info-label">נעדר מאז:</span>
+                    <span class="info-value missing-date"></span>
+                </div>
+                <div class="person-info">
+                    <span class="info-label">תיאור:</span>
+                    <span class="info-value description"></span>
+                </div>
+                <a href="#" class="more-details-btn">לפרטים נוספים</a>
+            </div>
+        </article>
+    </template>
+
+    <script>
+        // מחלקה לניהול מסד נתונים מקומי של נעדרים
+        class MissingPersonsDatabase {
+            constructor() {
+                this.dbName = 'missingPersonsDB';
+                this.dbVersion = 1;
+                this.db = null;
+                this.isInitialized = false;
+            }
+
+            // אתחול מסד הנתונים
+            async initDB() {
+                if (this.isInitialized) return this.db;
+                
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(this.dbName, this.dbVersion);
+
+                    request.onerror = (event) => {
+                        console.error('שגיאה בפתיחת מסד הנתונים:', event);
+                        reject('שגיאה בפתיחת מסד הנתונים');
+                    };
+
+                    request.onsuccess = (event) => {
+                        this.db = event.target.result;
+                        this.isInitialized = true;
+                        console.log('מסד הנתונים נפתח בהצלחה');
+                        resolve(this.db);
+                    };
+
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        
+                        // יצירת אובייקט סטור לנעדרים אם לא קיים
+                        if (!db.objectStoreNames.contains('missingPersons')) {
+                            const objectStore = db.createObjectStore('missingPersons', { keyPath: 'id', autoIncrement: true });
+                            
+                            // יצירת אינדקסים לחיפוש
+                            objectStore.createIndex('name', 'name', { unique: false });
+                            objectStore.createIndex('age', 'age', { unique: false });
+                            objectStore.createIndex('area', 'area', { unique: false });
+                            objectStore.createIndex('missingDate', 'missingDate', { unique: false });
+                            objectStore.createIndex('status', 'status', { unique: false });
+                            
+                            console.log('נוצר אובייקט סטור לנעדרים');
+                        }
+                    };
+                });
+            }
+
+            // קבלת כל הנעדרים
+            async getAllMissingPersons() {
+                await this.initDB();
+                
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction(['missingPersons'], 'readonly');
+                    const objectStore = transaction.objectStore('missingPersons');
+                    const request = objectStore.getAll();
+                    
+                    request.onsuccess = (event) => {
+                        resolve(event.target.result);
+                    };
+                    
+                    request.onerror = (event) => {
+                        console.error('שגיאה בקבלת רשימת נעדרים:', event);
+                        reject('שגיאה בקבלת רשימת נעדרים');
+                    };
+                });
+            }
+
+            // חיפוש נעדרים לפי קריטריונים
+            async searchMissingPersons(criteria = {}) {
+                const allPersons = await this.getAllMissingPersons();
+                
+                return allPersons.filter(person => {
+                    // חיפוש לפי שם
+                    if (criteria.name && !person.name.includes(criteria.name)) {
+                        return false;
+                    }
+                    
+                    // סינון לפי אזור
+                    if (criteria.area && person.area !== criteria.area) {
+                        return false;
+                    }
+                    
+                    // סינון לפי קטגוריית גיל
+                    if (criteria.ageCategory) {
+                        const age = parseInt(person.age);
+                        switch (criteria.ageCategory) {
+                            case 'child':
+                                if (age > 18) return false;
+                                break;
+                            case 'young':
+                                if (age < 19 || age > 30) return false;
+                                break;
+                            case 'adult':
+                                if (age < 31 || age > 60) return false;
+                                break;
+                            case 'elderly':
+                                if (age < 61) return false;
+                                break;
+                        }
+                    }
+                    
+                    return true;
+                });
+            }
+
+            // הוספת נעדר חדש למסד הנתונים (לשימוש עתידי)
+            async addMissingPerson(personData) {
+                await this.initDB();
+                
+                return new Promise((resolve, reject) => {
+                    // הוספת תאריך העלאת הדיווח
+                    const dataToAdd = {
+                        ...personData,
+                        reportDate: new Date().toISOString(),
+                        status: 'active' // סטטוס ברירת מחדל
+                    };
+
+                    const transaction = this.db.transaction(['missingPersons'], 'readwrite');
+                    const objectStore = transaction.objectStore('missingPersons');
+                    const request = objectStore.add(dataToAdd);
+
+                    request.onsuccess = (event) => {
+                        console.log('נעדר נוסף בהצלחה:', event.target.result);
+                        resolve(event.target.result); // מחזיר את המזהה שנוצר
+                    };
+
+                    request.onerror = (event) => {
+                        console.error('שגיאה בהוספת נעדר:', event);
+                        reject('שגיאה בהוספת נעדר');
+                    };
+                });
+            }
+
+            // קבלת נעדר לפי מזהה (לשימוש עתידי)
+            async getMissingPersonById(id) {
+                await this.initDB();
+                
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction(['missingPersons'], 'readonly');
+                    const objectStore = transaction.objectStore('missingPersons');
+                    const request = objectStore.get(Number(id));
+                    
+                    request.onsuccess = (event) => {
+                        if (event.target.result) {
+                            resolve(event.target.result);
+                        } else {
+                            reject(`נעדר עם מזהה ${id} לא נמצא`);
+                        }
+                    };
+                    
+                    request.onerror = (event) => {
+                        console.error('שגיאה בקבלת נתוני נעדר:', event);
+                        reject('שגיאה בקבלת נתוני נעדר');
+                    };
+                });
+            }
+        }
+
+        // הגדרות פגינציה
+        const ITEMS_PER_PAGE = 6;
+        let currentPage = 1;
+        let totalPages = 1;
+        let currentResults = [];
+
+        // מחלקה לניהול ממשק המשתמש של רשימת הנעדרים
+        class MissingPersonsUI {
+            constructor() {
+                this.db = new MissingPersonsDatabase();
+                this.missingPersonsGrid = document.getElementById('missingPersonsGrid');
+                this.loadingIndicator = document.getElementById('loadingIndicator');
+                this.emptyState = document.getElementById('emptyState');
+                this.paginationContainer = document.getElementById('pagination');
+                this.personCardTemplate = document.getElementById('personCardTemplate');
+                this.searchForm = document.getElementById('searchForm');
+                
+                this.init();
+            }
+            
+            async init() {
+                // הגדרת מאזינים לאירועים
+                this.searchForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.handleSearch();
+                });
+                
+                // טעינה ראשונית של נתונים
+                await this.loadMissingPersons();
+            }
+            
+            // טעינת ותצוגת נעדרים
+            async loadMissingPersons(searchCriteria) {
+                this.showLoading();
+                
+                try {
+                    let missingPersons;
+                    
+                    if (searchCriteria) {
+                        missingPersons = await this.db.searchMissingPersons(searchCriteria);
+                    } else {
+                        missingPersons = await this.db.getAllMissingPersons();
+                    }
+                    
+                    // שמירת התוצאות לשימוש בפגינציה
+                    currentResults = missingPersons;
+                    
+                    if (missingPersons.length === 0) {
+                        this.showEmptyState();
+                    } else {
+                        this.displayMissingPersons(missingPersons);
+                    }
+                } catch (error) {
+                    console.error('שגיאה בטעינת נעדרים:', error);
+                    this.showEmptyState('אירעה שגיאה בטעינת הנתונים. אנא נסו שנית מאוחר יותר.');
+                }
+            }
+            
+            // טיפול בחיפוש
+            handleSearch() {
+                const nameQuery = document.getElementById('nameSearch').value.trim();
+                const areaFilter = document.getElementById('areaFilter').value;
+                const ageFilter = document.getElementById('ageFilter').value;
+                
+                const searchCriteria = {};
+                
+                if (nameQuery) {
+                    searchCriteria.name = nameQuery;
+                }
+                
+                if (areaFilter) {
+                    searchCriteria.area = areaFilter;
+                }
+                
+                if (ageFilter) {
+                    searchCriteria.ageCategory = ageFilter;
+                }
+                
+                // איפוס עמוד נוכחי לתחילת החיפוש
+                currentPage = 1;
+                
+                this.loadMissingPersons(searchCriteria);
+            }
+            
+            // הצגת נעדרים בדף
+            displayMissingPersons(missingPersons) {
+                // חישוב פגינציה
+                totalPages = Math.ceil(missingPersons.length / ITEMS_PER_PAGE);
+                
+                // סינון התוצאות לעמוד הנוכחי
+                const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+                const endIndex = startIndex + ITEMS_PER_PAGE;
+                const personsToDisplay = missingPersons.slice(startIndex, endIndex);
+                
+                // ניקוי התצוגה הקודמת
+                this.missingPersonsGrid.innerHTML = '';
+                
+                // יצירת כרטיסי נעדרים
+                personsToDisplay.forEach(person => {
+                    const personCard = this.createPersonCard(person);
+                    this.missingPersonsGrid.appendChild(personCard);
+                });
+                
+                // עדכון פגינציה
+                this.updatePagination();
+                
+                // הצגת הגריד והסתרת מצבים אחרים
+                this.hideLoading();
+                this.emptyState.style.display = 'none';
+                this.missingPersonsGrid.style.display = 'grid';
+                this.paginationContainer.style.display = totalPages > 1 ? 'flex' : 'none';
+            }
+            
+            // יצירת כרטיס נעדר
+            createPersonCard(person) {
+                const template = this.personCardTemplate.content.cloneNode(true);
+                
+                // עדכון תמונה
+                const image = template.querySelector('.person-image');
+                if (person.imageUrl) {
+                    image.src = person.imageUrl;
+                } else {
+                    image.src = '/api/placeholder/400/320'; // תמונת ברירת מחדל
+                }
+                image.alt = person.name;
+                
+                // עדכון פרטים
+                template.querySelector('.person-name').textContent = person.name;
+                template.querySelector('.age').textContent = person.age;
+                template.querySelector('.area').textContent = person.area;
+                template.querySelector('.missing-date').textContent = this.formatDate(person.missingDate);
+                template.querySelector('.description').textContent = person.description || 'אין תיאור';
+                
+                // הגדרת קישור לדף פרטים
+                const detailsBtn = template.querySelector('.more-details-btn');
+                detailsBtn.href = `./missing-person-details.html?id=${person.id}`;
+                
+                return template;
+            }
+            
+            // עדכון פגינציה
+            updatePagination() {
+                this.paginationContainer.innerHTML = '';
+                
+                if (totalPages <= 1) {
+                    this.paginationContainer.style.display = 'none';
+                    return;
+                }
+                
+                this.paginationContainer.style.display = 'flex';
+                
+                // כפתור "הקודם"
+                if (currentPage > 1) {
+                    const prevBtn = this.createPaginationButton('« הקודם', currentPage - 1);
+                    this.paginationContainer.appendChild(prevBtn);
+                }
+                
+                // כפתורי מספרים
+                let startPage = Math.max(1, currentPage - 2);
+                let endPage = Math.min(totalPages, startPage + 4);
+                
+                if (endPage - startPage < 4) {
+                    startPage = Math.max(1, endPage - 4);
+                }
+                
+                for (let i = startPage; i <= endPage; i++) {
+                    const numBtn = this.createPaginationButton(i.toString(), i);
+                    if (i === currentPage) {
+                        numBtn.classList.add('active');
+                    }
+                    this.paginationContainer.appendChild(numBtn);
+                }
+                
+                // כפתור "הבא"
+                if (currentPage < totalPages) {
+                    const nextBtn = this.createPaginationButton('הבא »', currentPage + 1);
+                    this.paginationContainer.appendChild(nextBtn);
+                }
+            }
+            
+            // יצירת כפתור פגינציה
+            createPaginationButton(text, pageNum) {
+                const button = document.createElement('button');
+                button.className = 'pagination-btn';
+                button.textContent = text;
+                button.addEventListener('click', () => this.goToPage(pageNum));
+                return button;
+            }
+            
+            // מעבר לעמוד מסוים
+            goToPage(pageNum) {
+                if (pageNum !== currentPage && pageNum >= 1 && pageNum <= totalPages) {
+                    currentPage = pageNum;
+                    this.displayMissingPersons(currentResults);
+                    window.scrollTo(0, 0);
+                }
+            }
+            
+            // פרמוט תאריך לתצוגה
+            formatDate(dateString) {
+                if (!dateString) return 'לא ידוע';
+                
+                const date = new Date(dateString);
+                return date.toLocaleDateString('he-IL', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                });
+            }
+            
+            // מצב טעינה
+            showLoading() {
+                this.loadingIndicator.style.display = 'block';
+                this.missingPersonsGrid.style.display = 'none';
+                this.emptyState.style.display = 'none';
+                this.paginationContainer.style.display = 'none';
+            }
+            
+            // הסתרת מצב טעינה
+            hideLoading() {
+                this.loadingIndicator.style.display = 'none';
+            }
+            
+            // תצוגת מצב ריק (אין נעדרים)
+            showEmptyState(message) {
+                this.hideLoading();
+                this.missingPersonsGrid.style.display = 'none';
+                this.paginationContainer.style.display = 'none';
+                
+                this.emptyState.style.display = 'block';
+                
+                if (message) {
+                    this.emptyState.querySelector('p').textContent = message;
+                } else {
+                    this.emptyState.querySelector('p').textContent = 'לא נמצאו נעדרים במערכת. ברגע שיתווספו נעדרים, הם יופיעו כאן.';
+                }
+            }
+        } // סגירת המחלקה MissingPersonsUI
+
+        // אתחול המערכת
+        const ui = new MissingPersonsUI();
+    </script>
+</body>
+</html> 

@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css"
+    <title>היימנוט</title>
+    <style>
+   
+
+
+        :root {
+            --primary: #1e3a8a;
+            --secondary: #3b82f6;
+            --background: #f5f7fa;
+            --card-bg: #ffffff;
+            --text: #1f2937;
+            --text-light: #6b7280;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Assistant', 'Rubik', sans-serif;
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1.5rem;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: var(--shadow);
+            padding: 1rem 0;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+        }
+
+        .logo {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            right: 0;
+            background-color: white;
+            transition: width 0.3s ease;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        .menu-toggle {
+            display: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .hero {
+            text-align: center;
+            padding: 4rem 1rem;
+            background: linear-gradient(to bottom, rgba(59, 130, 246, 0.1), transparent);
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            animation: fadeIn 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .search-section {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            padding: 2.5rem;
+            box-shadow: var(--shadow);
+            margin: 2rem 0;
+            animation: slideUp 0.5s ease;
+        }
+
+        .search-container {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .search-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+        }
+
+        .search-box {
+            padding: 0.875rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .image-upload {
+            border: 2px dashed #d1d5db;
+            padding: 2.5rem;
+            text-align: center;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .image-upload:hover {
+            background-color: #f9fafb;
+            border-color: var(--secondary);
+        }
+
+        .button {
+            background: var(--primary);
+            color: white;
+            padding: 0.875rem 2rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .button:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        footer {
+            background: var(--primary);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-wrap: wrap;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            nav ul {
+                display: none;
+                width: 100%;
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem 0;
+            }
+
+            nav ul.active {
+                display: flex;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* עיצוב הפופ-אפ של התקנון */
+        .popup-container {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .popup-content {
+            background-color: white;
+            width: 90%;
+            max-width: 700px;
+            max-height: 80vh;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+            overflow-y: auto;
+            margin: 20px;
+        }
+
+        .popup-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+        }
+
+        .popup-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1a4789;
+        }
+
+        .close-popup {
+            font-size: 24px;
+            cursor: pointer;
+            color: #777;
+            padding: 5px;
+        }
+
+        .close-popup:hover {
+            color: #000;
+        }
+
+        .terms-content {
+            margin-bottom: 20px;
+        }
+
+        .terms-section {
+            margin-bottom: 20px;
+        }
+
+        .terms-section h2 {
+            color: #1a4789;
+            margin-bottom: 10px;
+        }
+
+        .terms-actions {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #ddd;
+        }
+
+        .accept-button, .decline-button {
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .accept-button {
+            background-color: #1a4789;
+            color: white;
+            border: none;
+        }
+
+        .decline-button {
+            background-color: #f1f1f1;
+            color: #333;
+            border: 1px solid #ddd;
+        }
+
+        .accept-button:hover {
+            background-color: #2c5aa0;
+        }
+
+        .decline-button:hover {
+            background-color: #e5e5e5;
+        }
+
+        /* הוספת סגנון להודעת האישור */
+        .terms-success-message {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #4caf50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            z-index: 9999;
+            display: none;
+            animation: slideUp 0.3s ease;
+        }
+
+        /* עדכון סגנון כפתורי התקנון */
+        .decline-button {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+        }
+
+        .decline-button:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <div class="logo">היימנוט
+            </div>
+            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
+            <nav>
+                <ul>
+                   <a href="#">דף הבית</a>
+                    <a href="report-of-users.html">דווח על נעדר</a>
+                   <a href="list-of-missing-people.html">רשימת נעדרים</a>
+                    <a href="how-it-works.html">כיצד זה עובד</a>
+                    <a href="#" onclick="showTerms(); return false;">תקנון אתר</a>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- חלון פופ-אפ של התקנון -->
+    <div id="termsPopup" class="popup-container">
+        <div class="popup-content">
+            <div class="popup-header">
+                <div class="popup-title">תקנון האתר</div>
+                <span class="close-popup" onclick="closeTerms()">&times;</span>
+            </div>
+            
+            <div class="terms-content">
+                <div class="terms-section">
+                    <h2>1. כללי</h2>
+                    <p>ברוכים הבאים לאתר תור נעדרים בעזרת טכנולוגיית AI (להלן: "האתר"). האתר הינו מערכת מתקדמת לזיהוי נעדרים בזמן אמת.</p>
+                    <p>השימוש באתר זה ובשירותים המוצעים בו כפופים לתנאי השימוש המפורטים בתקנון זה. אנא קרא/י בעיון את התנאים שלהלן, שכן הגלישה באתר וכל שימוש בו מהווים הסכמה מצדך לתנאים אלו.</p>
+                </div>
+                
+                <div class="terms-section">
+                    <h2>2. הגדרות</h2>
+                    <p>"האתר" - אתר תור נעדרים בעזרת טכנולוגיית AI.</p>
+                    <p>"המפעילה" - היימנוט המפעילה את האתר.</p>
+                    <p>"משתמש" - כל אדם או גוף המשתמש באתר ובשירותים המוצעים בו.</p>
+                </div>
+                
+                <div class="terms-section">
+                    <h2>3. השימוש באתר</h2>
+                    <p>השימוש באתר מיועד למטרות חוקיות בלבד ובהתאם להוראות תקנון זה.</p>
+                    <p>המשתמש מתחייב שלא לעשות כל שימוש באתר לצורך ביצוע מעשה בלתי חוקי ו/או פוגעני.</p>
+                </div>
+                
+                <div class="terms-section">
+                    <h2>4. מדיניות פרטיות</h2>
+                    <p>המפעילה מכבדת את פרטיות המשתמשים באתר. כל מידע אישי שנמסר לאתר ישמש בהתאם למדיניות הפרטיות של האתר.</p>
+                    <p>המידע האישי שייאסף ישמש למטרות זיהוי נעדרים ומתן השירותים המוצעים באתר.</p>
+                </div>
+            </div>
+            
+            <div class="terms-actions">
+                <button class="accept-button" onclick="acceptTerms()">מאשר/ת את התקנון</button>
+                <button class="decline-button" onclick="closeTerms()">סגור</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- הוספת אלמנט להודעת האישור -->
+    <div id="termsSuccessMessage" class="terms-success-message">
+        התקנון אושר בהצלחה!
+    </div>
+
+    <main class="container">
+        <section class="hero">
+            <h1>איתור נעדרים בעזרת טכנולוגיית AI</h1>
+            <p>מערכת מתקדמת לזיהוי נעדרים בזמן אמת</p>
+        </section>
+
+        <section class="search-section">
+            <h2>הזן פרטי נעדר</h2>
+            <form id="הוסף נעדר" class="search-container">
+                <div class="search-options">
+                    <input type="text" class="search-box" placeholder="שם הנעדר" required>
+                    <input type="text" class="search-box" placeholder="מיקום אחרון" required>
+                    <input type="number" class="search-box" placeholder="גיל" required>
+                    <input type="tel" class="search-box" placeholder="טלפון לעדכונים" pattern="05[0-9]{8}" title="נא להזין מספר טלפון ישראלי תקין (10 ספרות המתחילות ב-05)" required>
+                </div>
+                <div class="image-upload" onclick="document.getElementById('file-upload').click()">
+                    <input type="file" id="file-upload" accept="image/*" hidden>
+                    <p>העלה תמונה לחיפוש</p>
+                </div>
+                <button type="submit" class="button">הוסף נעדר</button>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 היימנוט. כל הזכויות שמורות.</p>
+    </footer>
+<script src="script.js"></script>
+    <script>
+        function toggleMenu() {
+            document.querySelector("nav ul").classList.toggle("active");
+        }
+           
+      
+    </script>
+
+    <script>
+        // פונקציות לניהול התקנון
+        function showTerms() {
+            document.getElementById('termsPopup').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeTerms() {
+            document.getElementById('termsPopup').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        }
+        
+        function acceptTerms() {
+            localStorage.setItem('termsAccepted', 'true');
+            localStorage.setItem('termsAcceptedDate', new Date().toISOString());
+            
+            // הצגת הודעת אישור
+            const successMessage = document.getElementById('termsSuccessMessage');
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+            
+            closeTerms();
+        }
+
+        function declineTerms() {
+            alert('עליך לאשר את התקנון כדי להשתמש באתר');
+        }
+
+        // סגירת הפופ-אפ בלחיצה מחוץ לתוכן
+        document.addEventListener('click', function(event) {
+            const popup = document.getElementById('termsPopup');
+            if (event.target === popup && localStorage.getItem('termsAccepted')) {
+                closeTerms();
+            }
+        });
+
+        // סגירה בלחיצה על ESC רק אם התקנון כבר אושר
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && localStorage.getItem('termsAccepted')) {
+                closeTerms();
+            }
+        });
+
+        // בדיקת אישור תקנון בטעינת הדף
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!localStorage.getItem('termsAccepted')) {
+                showTerms();
+            }
+        });
+
+        // מניעת שליחת הטופס ללא אישור תקנון
+        document.getElementById('הוסף נעדר').addEventListener('submit', function(e) {
+            if (!localStorage.getItem('termsAccepted')) {
+                e.preventDefault();
+                showTerms();
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>דיווח על נעדר</title>
+    <style>
+        :root {
+            --primary-color: #003399;
+            --primary-light: #0055CC;
+            --primary-dark: #002277;
+            --error-color: #dc3545;
+            --success-color: #28a745;
+            --background-color: #f8f9fa;
+            --card-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Arial, sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: var(--background-color);
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: var(--card-shadow);
+            border-top: 5px solid var(--primary-color);
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 2rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            position: relative;
+        }
+
+        h1::after {
+            content: "";
+            width: 100px;
+            height: 4px;
+            background: var(--primary-color);
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid #ddd;
+            border-radius: 0.75rem;
+            font-size: 1rem;
+            background: #f9f9f9;
+            transition: border-color var(--transition-speed), box-shadow var(--transition-speed);
+        }
+
+        input:focus, textarea:focus {
+            border-color: var(--primary-light);
+            box-shadow: 0 0 8px rgba(0, 85, 204, 0.3);
+            background: white;
+            outline: none;
+        }
+
+        .form-group.invalid input,
+        .form-group.invalid textarea {
+            border-color: var(--error-color);
+            background: rgba(220, 53, 69, 0.05);
+        }
+
+        .required-mark {
+            color: var(--error-color);
+            margin-right: 0.25rem;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            font-size: 0.85rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+
+        .btn {
+            background: var(--primary-light);
+            color: white;
+            padding: 0.875rem 1.5rem;
+            border: none;
+            border-radius: 0.75rem;
+            cursor: pointer;
+            width: 100%;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all var(--transition-speed);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .preview-container {
+            margin-top: 0.5rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .preview {
+            max-width: 250px;
+            max-height: 250px;
+            border-radius: 0.75rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            object-fit: cover;
+            display: none;
+        }
+
+        .file-input-wrapper {
+            margin-top: 0.25rem;
+            position: relative;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            inset: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-input-label {
+            padding: 0.625rem 0.9375rem;
+            background: #f0f0f0;
+            color: #333;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: background var(--transition-speed);
+            border: 1px solid #ddd;
+            font-size: 0.9rem;
+            display: inline-block;
+        }
+
+        .file-input-wrapper:hover .file-input-label {
+            background: #e0e0e0;
+        }
+
+        .file-name {
+            margin-right: 0.625rem;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        footer {
+            text-align: center;
+            color: #666;
+            margin-top: 1.25rem;
+            font-size: 0.9rem;
+        }
+
+        .success-message {
+            background: rgba(40, 167, 69, 0.1);
+            border: 1px solid var(--success-color);
+            color: var(--success-color);
+            padding: 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 1.25rem;
+            text-align: center;
+            display: none;
+        }
+
+        .whatsapp-icon {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.25rem;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            input, textarea {
+                padding: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>דיווח על נעדר - עזור לנו למצוא אותם</h1>
+        <div id="successMessage" class="success-message">הדיווח נשלח בהצלחה! תודה על העזרה.</div>
+        
+        <form id="missingPersonForm">
+            <div class="form-group">
+                <label for="name">שם הנעדר <span class="required-mark">*</span></label>
+                <input type="text" id="name" required>
+                <div class="error-message">אנא הזן את שם הנעדר</div>
+            </div>
+
+            <div class="form-group">
+                <label for="description">תיאור מפורט <span class="required-mark">*</span></label>
+                <textarea id="description" rows="5" required placeholder="תיאור פיזי, בגדים, מיקום אחרון..."></textarea>
+                <div class="error-message">אנא הזן תיאור מפורט</div>
+            </div>
+
+            <div class="form-group">
+                <label for="contactNumber">מספר טלפון של איש קשר <span class="required-mark">*</span></label>
+                <input type="tel" id="contactNumber" required placeholder="0501234567">
+                <div class="error-message">יש להזין מספר טלפון תקין (10 ספרות)</div>
+            </div>
+
+            <div class="form-group">
+                <label for="photo">תמונה של הנעדר:</label>
+                <div class="file-input-wrapper">
+                    <span class="file-input-label">בחר תמונה</span>
+                    <input type="file" id="photo" accept="image/*">
+                </div>
+                <span id="photoFileName" class="file-name"></span>
+                <div class="preview-container">
+                    <img id="photoPreview" class="preview" alt="תצוגה מקדימה של התמונה">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="video">סרטון (אם קיים):</label>
+                <div class="file-input-wrapper">
+                    <span class="file-input-label">בחר סרטון</span>
+                    <input type="file" id="video" accept="video/*">
+                </div>
+                <span id="videoFileName" class="file-name"></span>
+                <div class="preview-container">
+                    <video id="videoPreview" class="preview" controls></video>
+                </div>
+            </div>
+
+            <button type="submit" class="btn">
+               
+        <path d="M17.498 14.382c-.301-.15-1.767-.867-2.04-.966-.273-.101-.473-.15-.673.15-.197.295-.771.964-.944 1.162-.175.195-.349.21-.646.075-.3-.15-1.263-.465-2.403-1.485-.888-.795-1.484-1.77-1.66-2.07-.174-.3-.019-.465.13-.615.136-.135.301-.345.451-.523.146-.181.194-.301.297-.496.1-.21.049-.375-.025-.524-.075-.15-.672-1.62-.922-2.206-.24-.584-.487-.51-.672-.51-.172-.015-.371-.015-.571-.015-.2 0-.523.074-.797.359-.273.3-1.045 1.02-1.045 2.475s1.07 2.865 1.219 3.075c.149.195 2.105 3.195 5.1 4.485.714.3 1.27.48 1.704.629.714.227 1.365.195 1.88.121.574-.091 1.767-.721 2.016-1.426.255-.705.255-1.29.18-1.425-.074-.135-.27-.21-.57-.345m-5.446 7.443h-.016c-1.77 0-3.524-.48-5.055-1.38l-.36-.214-3.75.975 1.005-3.645-.239-.375c-.99-1.576-1.516-3.391-1.516-5.26 0-5.445 4.455-9.885 9.942-9.885 2.654 0 5.145 1.035 7.021 2.91 1.875 1.859 2.909 4.35 2.909 6.99-.004 5.444-4.46 9.885-9.935 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.893c0 2.096.549 4.14 1.595 5.945L0 24l6.335-1.652c1.746.943 3.71 1.444 5.71 1.447h.006c6.585 0 11.946-5.336 11.949-11.896 0-3.176-1.24-6.165-3.495-8.411"/>
+                </svg>
+                שלח דיווח 
+            </button>
+        </form>
+    </div>
+
+    <footer>
+        <p>© היימנוט | כל הזכויות שמורות</p>
+    </footer>
+
+    <script>
+        const formElements = {
+            form: document.getElementById('missingPersonForm'),
+            phone: document.getElementById('contactNumber'),
+            success: document.getElementById('successMessage'),
+            fields: {
+                name: document.getElementById('name'),
+                description: document.getElementById('description'),
+                contactNumber: document.getElementById('contactNumber'),
+                photo: {
+                    input: document.getElementById('photo'),
+                    preview: document.getElementById('photoPreview'),
+                    fileName: document.getElementById('photoFileName')
+                },
+                video: {
+                    input: document.getElementById('video'),
+                    preview: document.getElementById('videoPreview'),
+                    fileName: document.getElementById('videoFileName')
+                }
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setupEventListeners();
+        });
+
+        function setupEventListeners() {
+            formElements.form.addEventListener('submit', handleSubmit);
+            formElements.phone.addEventListener('input', formatPhone);
+            Object.values(formElements.fields).forEach(field => {
+                if (field.tagName === 'INPUT' || field.tagName === 'TEXTAREA') {
+                    field.addEventListener('blur', () => validateField(field));
+                }
+            });
+            formElements.fields.photo.input.addEventListener('change', handleFile(formElements.fields.photo));
+            formElements.fields.video.input.addEventListener('change', handleFile(formElements.fields.video));
+        }
+
+        function handleSubmit(e) {
+            e.preventDefault();
+            if (validateForm()) {
+                sendWhatsApp();
+            }
+        }
+
+        function formatPhone(e) {
+            e.target.value = e.target.value.replace(/\D/g, '').slice(0, 10);
+        }
+
+        function validateForm() {
+            return Object.values(formElements.fields)
+                .filter(field => field.required)
+                .every(field => validateField(field));
+        }
+
+        function validateField(field) {
+            const group = field.closest('.form-group');
+            const error = group.querySelector('.error-message');
+            const value = field.value.trim();
+            
+            if (!value) {
+                showError(group, error);
+                return false;
+            }
+            
+            if (field.id === 'contactNumber' && !/^05\d{8}$/.test(value)) {
+                showError(group, error);
+                return false;
+            }
+            
+            hideError(group, error);
+            return true;
+        }
+
+        function showError(group, error) {
+            group.classList.add('invalid');
+            error.style.display = 'block';
+        }
+
+        function hideError(group, error) {
+            group.classList.remove('invalid');
+            error.style.display = 'none';
+        }
+
+        function handleFile({ preview, fileName }) {
+            return (e) => {
+                const file = e.target.files[0];
+                if (!file) {
+                    preview.style.display = 'none';
+                    fileName.textContent = '';
+                    return;
+                }
+                
+                fileName.textContent = file.name;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            };
+        }
+
+        function sendWhatsApp() {
+            const { name, description, contactNumber } = formElements.fields;
+            const message = encodeURIComponent(`דיווח דחוף על נעדר:
+שם: ${name.value.trim()}
+תיאור: ${description.value.trim()}
+איש קשר: ${contactNumber.value.trim()}
+*נשלח מפלטפורמת חיפוש נעדרים - אנא פעל במהירות!*`);
+            
+            
+            formElements.success.style.display = 'block';
+            setTimeout(resetForm, 3000);
+        }
+
+        function resetForm() {
+            formElements.form.reset();
+            Object.values(formElements.fields).forEach(field => {
+                if (field.preview) {
+                    field.preview.style.display = 'none';
+                    field.fileName.textContent = '';
+                }
+                validateField(field);
+            });
+            formElements.success.style.display = 'none';
+        }
+    </script>
+</body>
+</html>

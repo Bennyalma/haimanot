@@ -1,0 +1,178 @@
+     /* סגנונות לאנימציית AI וההודעות בטופס נעדרים */
+
+/* אנימציית כתיבה לחיקוי AI */
+#הוסף נעדר{
+    display: none;
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.typing-dots {
+    display: inline-block;
+}
+
+.typing-dots span {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #1a4789;
+    margin: 0 3px;
+    animation: blink 1.4s infinite both;
+}
+
+.typing-dots span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-dots span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+@keyframes blink {
+    0% { opacity: 0.2; transform: scale(0.8); }
+    20% { opacity: 1; transform: scale(1); }
+    100% { opacity: 0.2; transform: scale(0.8); }
+}
+
+.typing-animation p {
+    color: #555;
+    margin-top: 10px;
+    font-size: 14px;
+}
+
+/* הודעת אישור */
+.success-message {
+    display: none;
+    background-color: #e8f5e9;
+    border-right: 4px solid #4caf50;
+    color: #2e7d32;
+    padding: 20px 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+    font-weight: bold;
+    text-align: center;
+    transition: opacity 0.5s ease;
+    opacity: 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.success-message p {
+    margin: 5px 0;
+}
+
+.success-message p:first-child {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#requestId {
+    font-family: monospace;
+    background-color: rgba(0, 0, 0, 0.05);
+    padding: 2px 5px;
+    border-radius: 3px;
+    letter-spacing: 1px;
+}
+
+/* עיצוב כפתור בזמן טעינה */
+button:disabled {
+
+    background-color: #90a4c5 !important;
+    cursor: not-allowed;
+
+}
+.move {
+    transform: translate(200px);
+}
+
+/* עיצוב טופס החיפוש */
+.search-container {
+    display: grid;
+    gap: 1.5rem;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.search-options {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.search-box {
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    width: 100%;
+    transition: all 0.3s ease;
+}
+
+.search-box:focus {
+    border-color: #1a4789;
+    box-shadow: 0 0 0 2px rgba(26, 71, 137, 0.1);
+}
+
+/* עיצוב אזור העלאת תמונה */
+.image-upload {
+    grid-column: 1 / -1;
+    border: 2px dashed #ddd;
+    padding: 2rem;
+    text-align: center;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+    min-height: 150px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.image-upload:hover {
+    border-color: #1a4789;
+    background-color: #f0f4f8;
+}
+
+.image-upload p {
+    font-size: 1.1rem;
+    color: #666;
+}
+
+/* עיצוב כפתור */
+.button {
+    grid-column: 1 / -1;
+    background: #1a4789;
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: auto;
+    max-width: 200px;
+    margin: 0 auto;
+}
+
+.button:hover {
+    background: #2c5aa0;
+    transform: translateY(-2px);
+}
+
+/* תיקון רספונסיביות */
+@media (max-width: 768px) {
+    .search-options {
+        grid-template-columns: 1fr;
+    }
+    
+    .button {
+        width: 100%;
+        max-width: none;
+    }
+}
