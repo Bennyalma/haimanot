@@ -94,79 +94,121 @@ button:disabled {
     display: grid;
     gap: 1.5rem;
     max-width: 800px;
-    margin: 0 auto;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
 .search-options {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
+    gap: 1.5rem;
+    margin: 0 auto;
+    width: 100%;
 }
 
 .search-box {
-    padding: 12px;
-    border: 1px solid #ddd;
+    padding: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 8px;
     font-size: 16px;
     width: 100%;
     transition: all 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.8);
 }
 
 .search-box:focus {
     border-color: #1a4789;
-    box-shadow: 0 0 0 2px rgba(26, 71, 137, 0.1);
+    box-shadow: 0 0 0 3px rgba(26, 71, 137, 0.1);
+    background-color: rgba(255, 255, 255, 0.95);
 }
 
 /* עיצוב אזור העלאת תמונה */
 .image-upload {
     grid-column: 1 / -1;
-    border: 2px dashed #ddd;
-    padding: 2rem;
+    border: 2px dashed rgba(255, 255, 255, 0.3);
+    padding: 3rem;
     text-align: center;
-    border-radius: 8px;
+    border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
-    background-color: #f8f9fa;
-    min-height: 150px;
+    background-color: rgba(255, 255, 255, 0.05);
+    min-height: 180px;
     display: flex;
     align-items: center;
     justify-content: center;
+    margin: 1rem 0;
 }
 
 .image-upload:hover {
     border-color: #1a4789;
-    background-color: #f0f4f8;
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.upload-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.upload-icon {
+    width: 48px;
+    height: 48px;
+    color: #1a4789;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.image-upload:hover .upload-icon {
+    transform: scale(1.1);
+    opacity: 1;
 }
 
 .image-upload p {
-    font-size: 1.1rem;
+    font-size: 1.2rem;
     color: #666;
+    margin: 0;
 }
 
 /* עיצוב כפתור */
 .button {
-    grid-column: 1 / -1;
-    background: #1a4789;
-    color: white;
-    padding: 12px 24px;
+    background: linear-gradient(135deg, #1a4789, #2c5aa0);
     border: none;
+    color: white;
+    padding: 15px 30px;
     border-radius: 8px;
-    font-size: 1rem;
+    font-size: 1.1rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
     width: auto;
-    max-width: 200px;
-    margin: 0 auto;
+    max-width: 250px;
+    margin: 1rem auto;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .button:hover {
-    background: #2c5aa0;
     transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #2c5aa0, #1a4789);
 }
 
 /* תיקון רספונסיביות */
 @media (max-width: 768px) {
+    .search-container {
+        margin: 1rem;
+        padding: 1.5rem;
+        background: rgba(255, 255, 255, 0.15);
+    }
+
     .search-options {
         grid-template-columns: 1fr;
     }
@@ -175,4 +217,48 @@ button:disabled {
         width: 100%;
         max-width: none;
     }
+
+    .image-upload {
+        padding: 2rem;
+        min-height: 150px;
+    }
+    
+    .upload-icon {
+        width: 36px;
+        height: 36px;
+    }
+    
+    .image-upload p {
+        font-size: 1rem;
+    }
+}
+
+/* עדכון רקע הדף */
+body {
+    font-family: 'Assistant', 'Rubik', sans-serif;
+    background: linear-gradient(135deg, rgba(30, 58, 138, 0.05), rgba(59, 130, 246, 0.05));
+    color: var(--text);
+    line-height: 1.6;
+}
+
+/* עדכון כותרת */
+.search-section h2 {
+    text-align: center;
+    color: #1a4789;
+    font-size: 1.8rem;
+    margin-bottom: 2rem;
+    position: relative;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.search-section h2:after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60px;
+    height: 3px;
+    background: #1a4789;
+    border-radius: 2px;
 }
