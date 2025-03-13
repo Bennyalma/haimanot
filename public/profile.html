@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <title>פרופיל משתמש - היימנוט</title>
+    <style>
+        .profile-container {
+            max-width: 400px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background: var(--card-bg);
+            border-radius: 1rem;
+            box-shadow: var(--shadow);
+        }
+
+        .profile-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .profile-header i {
+            font-size: 5rem;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        .form-group input {
+            padding: 0.875rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .login-button {
+            background: var(--primary);
+            color: white;
+            padding: 0.875rem;
+            border: none;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 1rem;
+        }
+
+        .login-button:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .register-link {
+            text-align: center;
+            margin-top: 1rem;
+            color: var(--text-light);
+        }
+
+        .register-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+
+        .profile-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            gap: 0.3rem;
+        }
+
+        .profile-icon {
+            font-size: 2.2rem;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .profile-text {
+            font-size: 0.9rem;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        .profile-link:hover .profile-icon {
+            transform: scale(1.1);
+            color: #f0f7ff;
+        }
+
+        .profile-link:hover .profile-text {
+            opacity: 1;
+        }
+
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 2rem;
+            flex-direction: row;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-container">
+            <a href="profile.html" class="profile-link">
+                <i class="fas fa-user-shield profile-icon"></i>
+                <span class="profile-text">כניסה לפרופיל</span>
+            </a>
+            <div class="logo">היימנוט</div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="profile-container">
+            <div class="profile-header">
+                <i class="fas fa-user-shield"></i>
+                <h2>התחברות</h2>
+            </div>
+            <form class="profile-form" id="loginForm">
+                <div class="form-group">
+                    <label for="username">שם משתמש</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label for="password">סיסמה</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="login-button">התחבר</button>
+                <div class="register-link">
+                    עדיין אין לך חשבון? <a href="#">הירשם עכשיו</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <nav class="mobile-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>דף הבית</span>
+        </a>
+        <a href="report-of-users.html" class="nav-item">
+            <i class="fas fa-user-plus"></i>
+            <span>דווח על נעדר</span>
+        </a>
+        <a href="chat.html" class="nav-item" id="chatToggle">
+            <i class="fas fa-comments"></i>
+            <span>צ'אט</span>
+            <div class="chat-badge" style="display: none;">0</div>
+        </a>
+        <a href="list-of-missing-people.html" class="nav-item">
+            <i class="fas fa-list-ul"></i>
+            <span>רשימת נעדרים</span>
+        </a>
+        <a href="how-it-works.html" class="nav-item">
+            <i class="fas fa-info-circle"></i>
+            <span>כיצד זה עובד</span>
+        </a>
+    </nav>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // כאן תוכל להוסיף את הלוגיקה לטיפול בהתחברות
+            console.log('ניסיון התחברות:', { username, password });
+        });
+    </script>
+</body>
+</html> 

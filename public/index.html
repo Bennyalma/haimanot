@@ -50,6 +50,37 @@
             align-items: center;
             justify-content: space-between;
             gap: 2rem;
+            flex-direction: row;
+        }
+
+        .profile-link {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: white;
+            gap: 0.3rem;
+        }
+
+        .profile-icon {
+            font-size: 2.2rem;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .profile-text {
+            font-size: 0.9rem;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        .profile-link:hover .profile-icon {
+            transform: scale(1.1);
+            color: #f0f7ff;
+        }
+
+        .profile-link:hover .profile-text {
+            opacity: 1;
         }
 
         .logo {
@@ -228,6 +259,10 @@
     <header>
         <div class="container header-container">
             <div class="logo">היימנוט</div>
+            <a href="profile.html" class="profile-link">
+                <i class="fas fa-user-shield profile-icon"></i>
+                <span class="profile-text">כניסה לפרופיל</span>
+            </a>
         </div>
     </header>
 
@@ -259,6 +294,7 @@
             </form>
         </section>
     </main>
+   
 
     <nav class="mobile-nav">
         <a href="#" class="nav-item active">
@@ -268,6 +304,11 @@
         <a href="report-of-users.html" class="nav-item">
             <i class="fas fa-user-plus"></i>
             <span>דווח על נעדר</span>
+        </a>
+        <a href="chat.html" class="nav-item" id="chatToggle">
+            <i class="fas fa-comments"></i>
+            <span>צ'אט</span>
+            <div class="chat-badge" style="display: none;">0</div>
         </a>
         <a href="list-of-missing-people.html" class="nav-item">
             <i class="fas fa-list-ul"></i>

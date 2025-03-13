@@ -1,20 +1,33 @@
 const express = require('express');
-const mysql = require('mysql2');
+const app = express();
+const http = require('http').createServer(app);
+const io = require('socket.io')(http);
+const mysql = require('mysql2/promise');
 const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
-const dotenv = require('dotenv');
+require('dotenv').config();
+
+// הגדרות MySQL
+const pool = mysql.createPool({
+    host: process.env.DB_HOST || 'localhost',
+    user: process.env.DB_USER || 'root',
+    password: process.env.DB_PASSWORD,
+    database: process.env.DB_NAME || 'chat_db',
+    waitForConnections: true,
+    connectionLimit: 10,
+    queueLimit: 0
+});
 
 // טעינת משתני הסביבה
 dotenv.config();
 
-const app = express();
 const port = process.env.PORT || 5501;
 
 // הגדרות Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // הגדרות העלאת קבצים
 const storage = multer.diskStorage({
@@ -43,6 +56,86 @@ const upload = multer({
         cb(new Error('קבצים מסוג תמונה או וידאו בלבד מותרים'));
     }
 });
+
+// שמירת הודעות בזיכרון זמני (עד להעברה ל-DB)
+let messages = [];
+const MAX_MESSAGES = 100;
+
+// ניהול חיבורי Socket.IO
+io.on('connection', async (socket) => {
+    console.log('משתמש התחבר:', socket.id);
+
+    // שליחת הודעות קודמות למשתמש חדש
+    socket.on('get previous messages', async () => {
+        try {
+            const [rows] = await pool.execute(
+                'SELECT * FROM messages ORDER BY timestamp DESC LIMIT ?',
+                [MAX_MESSAGES]
+            );
+            socket.emit('previous messages', rows.reverse());
+        } catch (error) {
+            console.error('שגיאה בטעינת הודעות:', error);
+        }
+    });
+
+    // קבלת הודעה חדשה
+    socket.on('chat message', async (message) => {
+        try {
+            // שמירת ההודעה ב-DB
+            const [result] = await pool.execute(
+                'INSERT INTO messages (user_id, text, timestamp) VALUES (?, ?, ?)',
+                [message.userId, message.text, new Date()]
+            );
+            
+            message.id = result.insertId;
+            
+            // שידור ההודעה לכל המשתמשים
+            io.emit('chat message', message);
+            
+            // שמירה בזיכרון זמני
+            messages.push(message);
+            if (messages.length > MAX_MESSAGES) {
+                messages.shift();
+            }
+        } catch (error) {
+            console.error('שגיאה בשמירת הודעה:', error);
+        }
+    });
+
+    socket.on('disconnect', () => {
+        console.log('משתמש התנתק:', socket.id);
+    });
+});
+
+// נתיבי API
+app.get('/api/messages', async (req, res) => {
+    try {
+        const [rows] = await pool.execute(
+            'SELECT * FROM messages ORDER BY timestamp DESC LIMIT ?',
+            [MAX_MESSAGES]
+        );
+        res.json(rows.reverse());
+    } catch (error) {
+        res.status(500).json({ error: 'שגיאה בטעינת הודעות' });
+    }
+});
+
+// יצירת טבלאות DB בהפעלה ראשונית
+async function initDatabase() {
+    try {
+        await pool.execute(`
+            CREATE TABLE IF NOT EXISTS messages (
+                id INT AUTO_INCREMENT PRIMARY KEY,
+                user_id VARCHAR(255) NOT NULL,
+                text TEXT NOT NULL,
+                timestamp DATETIME DEFAULT CURRENT_TIMESTAMP
+            )
+        `);
+        console.log('טבלת הודעות נוצרה בהצלחה');
+    } catch (error) {
+        console.error('שגיאה ביצירת טבלת הודעות:', error);
+    }
+}
 
 // חיבור למסד הנתונים
 const db = mysql.createPool({
@@ -217,6 +310,7 @@ app.use((err, req, res, next) => {
 });
 
 // הפעלת השרת
-app.listen(port, () => {
+http.listen(port, async () => {
     console.log(`השרת פועל בפורט ${port}`);
+    await initDatabase();
 }); 
