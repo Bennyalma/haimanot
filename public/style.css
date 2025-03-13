@@ -114,41 +114,58 @@ button:disabled {
 
 .search-box {
     padding: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 2px solid #1a4789;
     border-radius: 8px;
     font-size: 16px;
     width: 100%;
     transition: all 0.3s ease;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: #ffffff;
+    color: #1f2937;
+    outline: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.search-box::placeholder {
+    color: #6b7280;
+    opacity: 0.8;
 }
 
 .search-box:focus {
-    border-color: #1a4789;
-    box-shadow: 0 0 0 3px rgba(26, 71, 137, 0.1);
-    background-color: rgba(255, 255, 255, 0.95);
+    border-color: var(--secondary);
+    box-shadow: 0 0 0 3px rgba(26, 71, 137, 0.2);
+    background-color: #ffffff;
+    transform: translateY(-1px);
+}
+
+.search-box:hover {
+    border-color: var(--secondary);
+    background-color: #ffffff;
 }
 
 /* עיצוב אזור העלאת תמונה */
 .image-upload {
     grid-column: 1 / -1;
-    border: 2px dashed rgba(255, 255, 255, 0.3);
-    padding: 3rem;
+    border: 2px dashed #1a4789;
+    padding: 2.5rem;
     text-align: center;
     border-radius: 12px;
     cursor: pointer;
     transition: all 0.3s ease;
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: #ffffff;
     min-height: 180px;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 1rem 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
 }
 
 .image-upload:hover {
-    border-color: #1a4789;
-    background-color: rgba(255, 255, 255, 0.1);
+    border-color: var(--secondary);
+    background-color: #f8fafc;
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .upload-content {
@@ -164,6 +181,7 @@ button:disabled {
     color: #1a4789;
     opacity: 0.8;
     transition: all 0.3s ease;
+    margin-bottom: 0.5rem;
 }
 
 .image-upload:hover .upload-icon {
@@ -173,8 +191,16 @@ button:disabled {
 
 .image-upload p {
     font-size: 1.2rem;
-    color: #666;
+    color: #1a4789;
     margin: 0;
+    font-weight: 500;
+}
+
+.image-upload .upload-hint {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-top: 0.5rem;
+    display: block;
 }
 
 /* עיצוב כפתור */
@@ -231,6 +257,11 @@ button:disabled {
     .image-upload p {
         font-size: 1rem;
     }
+
+    .search-box {
+        padding: 12px;
+        font-size: 14px;
+    }
 }
 
 /* עדכון רקע הדף */
@@ -239,6 +270,7 @@ body {
     background: linear-gradient(135deg, rgba(30, 58, 138, 0.05), rgba(59, 130, 246, 0.05));
     color: var(--text);
     line-height: 1.6;
+    padding-bottom: 75px;
 }
 
 /* עדכון כותרת */
@@ -261,4 +293,442 @@ body {
     height: 3px;
     background: #1a4789;
     border-radius: 2px;
+}
+
+/* עדכון תפריט הניווט */
+.mobile-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: white;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 0.8rem env(safe-area-inset-right) calc(0.8rem + env(safe-area-inset-bottom)) env(safe-area-inset-left);
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+    direction: rtl;
+    height: 75px;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-light);
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    padding: 0.5rem;
+    width: 25%;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.nav-item i {
+    font-size: 1.6rem;
+    margin-bottom: 0.5rem;
+    color: inherit;
+    -webkit-font-smoothing: antialiased;
+}
+
+.nav-item span {
+    font-size: 0.8rem;
+    text-align: center;
+    color: inherit;
+    font-weight: 500;
+}
+
+.nav-item.active {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.nav-item:hover {
+    color: var(--secondary);
+    transform: translateY(-2px);
+}
+
+/* התאמה למסכים קטנים */
+@media (max-width: 480px) {
+    .nav-item {
+        padding: 0.3rem;
+    }
+
+    .nav-item i {
+        font-size: 1.3rem;
+    }
+
+    .nav-item span {
+        font-size: 0.7rem;
+    }
+}
+
+/* התאמת תוכן הדף כדי שלא יוסתר על ידי הניווט */
+main {
+    margin-top: 1rem;
+    margin-bottom: 75px;
+}
+
+/* הסתרת הניווט הישן בהדר */
+header nav {
+    display: none;
+}
+
+/* התאמת הלוגו */
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+.logo {
+    font-size: 2rem;
+    font-weight: 700;
+    color: white;
+    text-shadow: none;
+    letter-spacing: 1px;
+}
+
+/* הסתרת כפתור התפריט */
+.menu-toggle {
+    display: none !important;
+}
+
+/* הסרת הגרדיאנט מה-hero section */
+.hero {
+    text-align: center;
+    padding: 3rem 1rem;
+    background: none;
+}
+
+/* התאמה למסכים קטנים */
+@media (max-width: 768px) {
+    header {
+        padding: 1rem 0;
+    }
+
+    .logo {
+        font-size: 1.75rem;
+    }
+
+    footer {
+        padding: 0.4rem;
+        font-size: 0.8rem;
+        height: 35px;
+    }
+
+    .mobile-nav {
+        bottom: 40px;
+        height: 60px;
+        padding: 0.5rem 0;
+    }
+
+    body {
+        padding-bottom: 90px;
+    }
+
+    main {
+        margin-bottom: 90px;
+    }
+}
+
+/* הסרת הגבולות והשקיפות מהקונטיינר */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+    background: none;
+    border: none;
+    box-shadow: none;
+}
+
+/* עיצוב Footer */
+footer {
+    display: none;
+}
+
+/* הצגת ה-footer כשמגיעים לתחתית הדף */
+body.show-footer footer {
+    transform: translateY(0);
+}
+
+/* התאמות רספונסיביות גלובליות */
+@media screen and (min-width: 1200px) {
+    .search-container {
+        max-width: 1000px;
+    }
+
+    .mobile-nav {
+        height: 85px;
+        padding-bottom: calc(0.8rem + env(safe-area-inset-bottom));
+    }
+
+    .nav-item i {
+        font-size: 1.8rem;
+    }
+
+    .nav-item span {
+        font-size: 0.9rem;
+    }
+
+    body {
+        padding-bottom: calc(75px + env(safe-area-inset-bottom));
+    }
+
+    main {
+        margin-bottom: 85px;
+    }
+}
+
+@media screen and (min-width: 769px) and (max-width: 1199px) {
+    .search-container {
+        max-width: 800px;
+    }
+
+    .mobile-nav {
+        height: 70px;
+        bottom: 40px;
+        padding-bottom: calc(0.6rem + env(safe-area-inset-bottom));
+    }
+
+    .nav-item i {
+        font-size: 1.6rem;
+    }
+
+    .nav-item span {
+        font-size: 0.85rem;
+    }
+}
+
+@media screen and (min-width: 481px) and (max-width: 768px) {
+    .search-container {
+        max-width: 600px;
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    .mobile-nav {
+        height: 65px;
+        bottom: 35px;
+        padding-bottom: calc(0.4rem + env(safe-area-inset-bottom));
+    }
+
+    .nav-item i {
+        font-size: 1.4rem;
+    }
+
+    .nav-item span {
+        font-size: 0.8rem;
+    }
+
+    footer {
+        height: 35px;
+    }
+
+    body {
+        padding-bottom: calc(65px + env(safe-area-inset-bottom));
+    }
+
+    main {
+        margin-bottom: 100px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .search-container {
+        margin: 0.5rem;
+        padding: 1rem;
+    }
+
+    .search-options {
+        gap: 1rem;
+    }
+
+    .mobile-nav {
+        height: 65px;
+        padding: 0.4rem 0;
+        padding-bottom: calc(0.4rem + env(safe-area-inset-bottom));
+    }
+
+    .nav-item {
+        padding: 0.2rem;
+    }
+
+    .nav-item i {
+        font-size: 1.3rem;
+        margin-bottom: 0.3rem;
+    }
+
+    .nav-item span {
+        font-size: 0.7rem;
+    }
+
+    footer {
+        height: 30px;
+        padding: 0.3rem;
+        font-size: 0.75rem;
+    }
+
+    body {
+        padding-bottom: calc(65px + env(safe-area-inset-bottom));
+    }
+
+    main {
+        margin-bottom: 65px;
+    }
+
+    .search-section h2 {
+        font-size: 1.5rem;
+    }
+
+    .button {
+        padding: 12px 24px;
+        font-size: 1rem;
+    }
+}
+
+/* תיקון לדפדפנים ספציפיים */
+@supports (-webkit-touch-callout: none) {
+    /* עבור Safari בiOS */
+    .mobile-nav {
+        padding-bottom: calc(0.8rem + env(safe-area-inset-bottom));
+        bottom: 0;
+    }
+}
+
+@supports (-moz-appearance: none) {
+    /* עבור Firefox */
+    .mobile-nav {
+        bottom: 40px !important;
+    }
+}
+
+/* תיקון לדפדפני Microsoft Edge ו-Safari */
+@supports (-ms-ime-align: auto) or (-webkit-touch-callout: none) {
+    .search-container {
+        -webkit-backdrop-filter: blur(10px);
+        backdrop-filter: none;
+        background: rgba(255, 255, 255, 0.95);
+    }
+}
+
+/* תיקון למסכים בעלי רזולוציה גבוהה */
+@media screen and (min-resolution: 192dpi) {
+    .search-container {
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .mobile-nav {
+        box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.12);
+    }
+}
+
+/* תיקון למצב נוף במובייל */
+@media screen and (max-height: 480px) and (orientation: landscape) {
+    .mobile-nav {
+        height: 55px;
+        padding-bottom: calc(0.3rem + env(safe-area-inset-bottom));
+    }
+
+    .nav-item i {
+        font-size: 1.2rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .nav-item span {
+        font-size: 0.65rem;
+    }
+
+    footer {
+        height: 30px;
+    }
+
+    body {
+        padding-bottom: calc(55px + env(safe-area-inset-bottom));
+    }
+
+    main {
+        margin-bottom: 55px;
+    }
+}
+
+/* תיקונים גלובליים למובייל */
+* {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+/* תיקונים ספציפיים ל-iOS */
+@supports (-webkit-touch-callout: none) {
+    .mobile-nav {
+        padding-bottom: calc(0.8rem + env(safe-area-inset-bottom));
+        bottom: 0;
+    }
+    
+    .nav-item {
+        padding-bottom: env(safe-area-inset-bottom);
+    }
+    
+    body {
+        padding-bottom: calc(75px + env(safe-area-inset-bottom));
+    }
+}
+
+/* תיקונים ספציפיים ל-Android */
+@supports not (-webkit-touch-callout: none) {
+    .mobile-nav {
+        height: 75px;
+    }
+    
+    body {
+        padding-bottom: 75px;
+    }
+}
+
+/* תיקון למצב נוף */
+@media screen and (max-height: 480px) and (orientation: landscape) {
+    .mobile-nav {
+        height: 55px;
+        padding-bottom: calc(0.3rem + env(safe-area-inset-bottom));
+    }
+    
+    .nav-item i {
+        font-size: 1.2rem;
+        margin-bottom: 0.2rem;
+    }
+    
+    .nav-item span {
+        font-size: 0.65rem;
+    }
+    
+    body {
+        padding-bottom: calc(55px + env(safe-area-inset-bottom));
+    }
+}
+
+/* תיקונים לביצועים */
+.mobile-nav {
+    will-change: transform;
+    transform: translateZ(0);
+    -webkit-transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+}
+
+/* תיקון לאנימציות חלקות */
+.nav-item {
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.nav-item:active {
+    transform: scale(0.95);
 }

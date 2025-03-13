@@ -317,17 +317,18 @@
         </header>
 
         <!-- Search and Filter Section -->
+         <label for="areaFiltera">אזור</label>
         <section class="search-section">
             <form class="search-form" id="searchForm">
                 <input type="text" placeholder="חיפוש לפי שם" id="nameSearch">
-                <select id="areaFilter">
+                <select id="areaFilter" aria-label="בחירת אזור">
                     <option value="">כל האזורים</option>
                     <option value="north">צפון</option>
                     <option value="center">מרכז</option>
                     <option value="south">דרום</option>
                     <option value="jerusalem">ירושלים</option>
                 </select>
-                <select id="ageFilter">
+                <select id="ageFilter" aria-label="בחירת קבוצת גיל">
                     <option value="">גיל</option>
                     <option value="child">ילדים (0-18)</option>
                     <option value="young">צעירים (19-30)</option>
@@ -363,6 +364,28 @@
             <!-- Pagination will be dynamically inserted here -->
         </div>
     </div>
+
+    <nav class="mobile-nav">
+        <a href="index.html" class="nav-item">
+            <i class="fas fa-home"></i>
+            <span>דף הבית</span>
+        </a>
+        <a href="report-of-users.html" class="nav-item">
+            <i class="fas fa-user-plus"></i>
+            <span>דווח על נעדר</span>
+        </a>
+        <a href="list-of-missing-people.html" class="nav-item active">
+            <i class="fas fa-list-ul"></i>
+            <span>רשימת נעדרים</span>
+        </a>
+        <a href="how-it-works.html" class="nav-item">
+            <i class="fas fa-info-circle"></i>
+            <span>כיצד זה עובד</span>
+        </a>
+    </nav>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
 
     <!-- Footer -->
     <footer>

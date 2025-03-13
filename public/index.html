@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <title>היימנוט</title>
     <style>
         :root {
@@ -227,15 +228,6 @@
     <header>
         <div class="container header-container">
             <div class="logo">היימנוט</div>
-            <div class="menu-toggle" onclick="toggleMenu()">☰</div>
-            <nav>
-                <ul>
-                    <li><a href="#">דף הבית</a></li>
-                    <li><a href="report-of-users.html">דווח על נעדר</a></li>
-                    <li><a href="list-of-missing-people.html">רשימת נעדרים</a></li>
-                    <li><a href="how-it-works.html">כיצד זה עובד</a></li>
-                </ul>
-            </nav>
         </div>
     </header>
 
@@ -252,7 +244,6 @@
                     <input type="text" class="search-box" placeholder="שם הנעדר" required>
                     <input type="text" class="search-box" placeholder="מיקום אחרון" required>
                     <input type="number" class="search-box" placeholder="גיל" required>
-                    <input type="tel" class="search-box" placeholder="טלפון לעדכונים" pattern="05[0-9]{8}" title="נא להזין מספר טלפון ישראלי תקין (10 ספרות המתחילות ב-05)" required>
                 </div>
                 <div class="image-upload" onclick="document.getElementById('file-upload').click()">
                     <input type="file" id="file-upload" accept="image/*" hidden>
@@ -268,9 +259,26 @@
             </form>
         </section>
     </main>
-    <footer>
-        <p>© 2025 היימנוט. כל הזכויות שמורות.</p>
-    </footer>
+
+    <nav class="mobile-nav">
+        <a href="#" class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>דף הבית</span>
+        </a>
+        <a href="report-of-users.html" class="nav-item">
+            <i class="fas fa-user-plus"></i>
+            <span>דווח על נעדר</span>
+        </a>
+        <a href="list-of-missing-people.html" class="nav-item">
+            <i class="fas fa-list-ul"></i>
+            <span>רשימת נעדרים</span>
+        </a>
+        <a href="how-it-works.html" class="nav-item">
+            <i class="fas fa-info-circle"></i>
+            <span>כיצד זה עובד</span>
+        </a>
+    </nav>
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             // Get the form element - adjust the selector if needed
@@ -427,6 +435,18 @@
                 //   }, 3000);
                 // });
             });
+        });
+
+        // הוספת קוד להצגת ה-footer
+        window.addEventListener('scroll', function() {
+            const scrollPosition = window.scrollY + window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            
+            if (scrollPosition >= documentHeight - 100) {
+                document.body.classList.add('show-footer');
+            } else {
+                document.body.classList.remove('show-footer');
+            }
         });
     </script>
 </body>
