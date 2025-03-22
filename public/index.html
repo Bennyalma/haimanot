@@ -314,181 +314,75 @@
             <i class="fas fa-list-ul"></i>
             <span>רשימת נעדרים</span>
         </a>
-        <a href="how-it-works.html" class="nav-item">
-            <i class="fas fa-info-circle"></i>
-            <span>כיצד זה עובד</span>
-        </a>
+        
     </nav>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Get the form element - adjust the selector if needed
-            const form = document.querySelector('form');
+            // הצגת שם הקובץ כאשר נבחר קובץ
+            const fileUpload = document.getElementById('file-upload');
+            const fileName = document.getElementById('file-name');
             
-            // Get the submit button by its text content
-            const submitButton = Array.from(document.querySelectorAll('button')).find(button => 
-                button.textContent.includes('הוסף נעדר')
-            );
+            fileUpload.addEventListener('change', function() {
+                if (this.files && this.files[0]) {
+                    fileName.textContent = this.files[0].name;
+                }
+            });
             
-            // Create the thinking animation element
-            const thinkingAnimation = document.createElement('div');
-            thinkingAnimation.classList.add('ai-thinking');
-            thinkingAnimation.innerHTML = `
-                <div class="thinking-dots">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-                <p>מעבד את הנתונים...</p>
-            `;
-            thinkingAnimation.style.display = 'none';
+            // התייחסות לטופס
+            const form = document.getElementById('missingPersonForm');
             
-            // Create the success message element
-            const successMessage = document.createElement('div');
-            successMessage.classList.add('success-message');
-            successMessage.style.display = 'none'; // תיקון סינטקס: הוספתי ערך תקין ל-display
-            
-            // Add these elements to the page near the form
-            form.parentNode.insertBefore(thinkingAnimation, form.nextSibling);
-            form.parentNode.insertBefore(successMessage, thinkingAnimation.nextSibling);
-            
-            // Add CSS for the animation
-            const style = document.createElement('style');
-            style.textContent = `
-                .ai-thinking {
-                    display: flex;
-                    flex-direction: column;
-                    align-items: center;
-                    margin: 20px 0;
-                    padding: 15px;
-                    border-radius: 8px;
-                    background-color: #f0f7ff;
-                }
-                
-                .thinking-dots {
-                    display: flex;
-                    justify-content: center;
-                }
-                
-                .thinking-dots span {
-                    width: 12px;
-                    height: 12px;
-                    margin: 0 5px;
-                    background-color: #2c7be5;
-                    border-radius: 50%;
-                    animation: thinking 1.4s infinite ease-in-out both;
-                }
-                
-                .thinking-dots span:nth-child(1) {
-                    animation-delay: -0.32s;
-                }
-                
-                .thinking-dots span:nth-child(2) {
-                    animation-delay: -0.16s;
-                }
-                
-                @keyframes thinking {
-                    0%, 80%, 100% { 
-                        transform: scale(0);
-                    }
-                    40% { 
-                        transform: scale(1);
-                    }
-                }
-                
-                .success-message {
-                    padding: 15px;
-                    margin: 20px 0;
-                    text-align: center;
-                    background-color: #d4edda;
-                    color: #155724;
-                    border-radius: 8px;
-                    direction: rtl;
-                }
-            `;
-            document.head.appendChild(style);
-            
-            // Handle form submission
-            form.addEventListener('submit', function(event) {
+            // הוספת מאזין לאירוע שליחת הטופס
+            form.addEventListener('submit', async function(event) {
                 event.preventDefault();
                 
-                // Get the phone number (adjust the selector based on your form)
-                const phoneInput = form.querySelector('input[type="tel"]') || 
-                                   form.querySelector('input[name="phone"]') ||
-                                   form.querySelector('input[placeholder*="פלאפון"]');
+                // בדיקה שכל השדות מלאים
+                const fullName = form.elements['full_name'].value;
+                const lastLocation = form.elements['last_location'].value;
+                const age = form.elements['age'].value;
+                const imageFile = fileUpload.files[0];
                 
-                const phoneNumber = phoneInput ? phoneInput.value : '';
+                if (!fullName || !lastLocation || !age || !imageFile) {
+                    alert('אנא מלא את כל השדות וצרף תמונה');
+                    return;
+                }
                 
-                // Hide the form, show the thinking animation
-                form.style.opacity = '0.5';
+                // יצירת אובייקט FormData לשליחת נתונים כולל קובץ
+                const formData = new FormData();
+                formData.append('full_name', fullName);
+                formData.append('last_location', lastLocation);
+                formData.append('age', age);
+                formData.append('image_file', imageFile);
+                
+                // הצגת אנימציית טעינה
+                const submitButton = form.querySelector('button[type="submit"]');
                 submitButton.disabled = true;
-                thinkingAnimation.style.display = 'flex';
+                submitButton.textContent = 'מעבד...';
                 
-                // Simulate form processing (replace with your actual form submission)
-                setTimeout(function() {
-                    // Hide thinking animation
-                    thinkingAnimation.style.display = 'none';
+                try {
+                    // שליחת הנתונים לשרת
+                    const response = await fetch('http://localhost:3000/addmissingperson', {
+                        method: 'POST',
+                        body: formData
+                    });
                     
-                    // Show success message
-                    successMessage.innerHTML = `
-                        <p>תודה! הנתונים התקבלו בהצלחה.</p>
-                        <p>עדכונים ישלחו למספר הפלאפון ${phoneNumber}</p>
-                    `;
-                    successMessage.style.display = 'block';
-                    
-                    // Optional: reset form
-                    // form.reset();
-                    
-                    // Optional: restore form visibility after a delay
-                    setTimeout(function() {
-                        form.style.opacity = '1';
-                        submitButton.disabled = false;
-                    }, 3000);
-                }, 2000); // Simulate 2 seconds of "thinking"
-                
-                // If you want to actually submit the form, uncomment below:
-                // const formData = new FormData(form);
-                // fetch(form.action, {
-                //   method: form.method,
-                //   body: formData
-                // })
-                // .then(response => response.json())
-                // .then(data => {
-                //   // Hide thinking animation
-                //   thinkingAnimation.style.display = 'none';
-                //   
-                //   // Show success message
-                //   successMessage.innerHTML = `
-                //     <p>תודה! הנתונים התקבלו בהצלחה.</p>
-                //     <p>עדכונים ישלחו למספר הפלאפון ${phoneNumber}</p>
-                //   `;
-                //   successMessage.style.display = 'block';
-                // })
-                // .catch(error => {
-                //   console.error('Error:', error);
-                //   successMessage.innerHTML = <p>אירעה שגיאה. אנא נסה שוב מאוחר יותר.</p>;
-                //   successMessage.style.display = 'block';
-                // })
-                // .finally(() => {
-                //   setTimeout(function() {
-                //     form.style.opacity = '1';
-                //     submitButton.disabled = false;
-                //   }, 3000);
-                // });
+                    if (response.ok) {
+                        alert('הנתונים נשלחו בהצלחה!');
+                        form.reset();
+                        fileName.textContent = '';
+                    } else {
+                        const errorData = await response.text();
+                        
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('אירעה שגיאה בשליחת הנתונים. אנא נסה שוב.');
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'הוסף נעדר';
+                }
             });
         });
-
-        // הוספת קוד להצגת ה-footer
-        window.addEventListener('scroll', function() {
-            const scrollPosition = window.scrollY + window.innerHeight;
-            const documentHeight = document.documentElement.scrollHeight;
-            
-            if (scrollPosition >= documentHeight - 100) {
-                document.body.classList.add('show-footer');
-            } else {
-                document.body.classList.remove('show-footer');
-            }
-        });
-    </script>
+        </script>
 </body>
 </html>
